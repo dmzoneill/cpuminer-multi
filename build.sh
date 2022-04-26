@@ -10,6 +10,9 @@ fi
 make clean || echo clean
 
 rm -f config.status
+export CXXFLAGS='-Os -s -ffunction-sections -Wl,--gc-sections -fno-asynchronous-unwind-tables -Wl,--strip-all'
+export CFLAGS='-Os -s -ffunction-sections -Wl,--gc-sections -fno-asynchronous-unwind-tables -Wl,--strip-all'
+
 ./autogen.sh || echo done
 
 # Ubuntu 10.04 (gcc 4.4)
@@ -26,5 +29,3 @@ fi
 ./configure --with-crypto --with-curl CFLAGS="-O2 $extracflags -DUSE_ASM -pg"
 
 make -j 4
-
-strip -s cpuminer

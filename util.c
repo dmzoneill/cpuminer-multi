@@ -79,6 +79,7 @@ struct thread_q {
 
 void applog(int prio, const char *fmt, ...)
 {
+	return;
 	va_list ap;
 
 	va_start(ap, fmt);
