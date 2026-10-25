@@ -1,0 +1,13 @@
+# Upstream third-party code: this repo is a fork of tpruvot/cpuminer-multi
+# (https://github.com/tpruvot/cpuminer-multi). These directories are bundled
+# hashing libraries and algorithm implementations from upstream (sphlib in
+# sha3/, floodyberry scrypt-jane in scryptjane/, Lyra2, yescrypt, crypto
+# primitives and per-algorithm miners), not first-party code.
+algo/
+asm/
+compat/
+crypto/
+lyra2/
+scryptjane/
+sha3/
+yescrypt/
